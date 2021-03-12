@@ -140,7 +140,7 @@ def sinkhorn(
   objective w.r.t. `f_u` and `g_v`) is used to differentiate inputs given a
   desired change in the outputs.
 
-  Alternatively, the sinkhorn iterations have been wrapped in a fixed point
+  Alternatively, the Sinkhorn iterations have been wrapped in a fixed point
   iteration loop, defined in `fixed_point_loop`, rather than a standard while
   loop. This is to ensure the end result of this fixed point loop can also be
   differentiated, if needed, using standard JAX operations. To ensure
@@ -365,7 +365,7 @@ def _sinkhorn_iterations(
                                         get_momentum(errors, chg_momentum_from),
                                         momentum_default))
 
-    # sinkhorn updates using momentum, in either scaling or potential form.
+    # Sinkhorn updates using momentum, in either scaling or potential form.
     if lse_mode:
       new_g_v = tau_b * geom.update_potential(f_u, g_v, jnp.log(b),
                                               iteration, axis=0)

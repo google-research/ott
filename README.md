@@ -2,7 +2,7 @@
 <img src="https://github.com/google-research/ott/raw/master/docs/logoOTT.png" alt="logo"  width="150"></img>
 </div>
 
-# Optimal Transport Tools (OTT), A toolbox for everything Wasserstein.
+# Optimal Transport Tools (OTT), A toolbox for everything Kantorovich-Rubenstein
 
 **See [full documentation](https://ott-jax.readthedocs.io/en/latest/) for detailed info.**
 
@@ -60,7 +60,7 @@ Currently implements the following classes and functions:
             class in [pointcloud.py](ott/geometry/grid.py) can be used to define the corresponding kernel
             <img src="https://render.githubusercontent.com/render/math?math=%24K_%7Bij%7D%3D%5Cexp(-c(x_i%2Cy_j)%2F%5Cepsilon)%24">. When the number of these points grows very large, this geometry can be instantiated with an `online=True` parameter, to avoid storing the kernel matrix and choose instead to recompute the matrix on the fly at each application.
 
-        -   Simlarly, if all measures to be considered are supported on a
+        -   Similarly, if all measures to be considered are supported on a
             separable grid (e.g. <img src="https://render.githubusercontent.com/render/math?math=%24%5C%7B1%2C...%2Cn%5C%7D%5Ed%24">), and the cost is separable
             along all axis, i.e. the cost between two points on that
             grid is equal to the sum of (possibly <img src="https://render.githubusercontent.com/render/math?math=%24d%24"> different) cost
@@ -71,7 +71,7 @@ Currently implements the following classes and functions:
 -   In the [core](ott/core) folder,
     -   The `sinkhorn` function in [sinkhorn.py](ott/core/sinkhorn.py) runs the Sinkhorn algorithm, with the aim of solving approximately one or various optimal transport problems in parallel. An OT problem is defined by a `Geometry` object, and a pair <img src="https://render.githubusercontent.com/render/math?math=%24(a%2C%20b)%24"> (or batch thereof) of histograms. The function's outputs are stored in a `SinkhornOutput` named t-uple, containing potentials, regularized OT cost, sequence of errors and a convergence flag. Such outputs (with the exception of errors and convergence flag) can be differentiated w.r.t. any of the three inputs `(Geometry, a, b)` either through backprop or implicit differentiation of the optimality conditions of the optimal potentials `f` and `g`.
 
-    -   In [discrete_barycenter.py](ott/tools/discrete_barycenter.py): implementation of discrete Wasserstein barycenters : given <img src="https://render.githubusercontent.com/render/math?math=%24N%24"> histograms all supported on the same `Geometry`, compute a barycenter of theses measures, using an algorithm by [Janati et al. (2020)](https://arxiv.org/abs/2006.02575)
+    -   In [discrete_barycenter.py](ott/tools/discrete_barycenter.py): implementation of discrete Kantorovich-Rubinstein barycenters : given <img src="https://render.githubusercontent.com/render/math?math=%24N%24"> histograms all supported on the same `Geometry`, compute a barycenter of these measures, using an algorithm by [Janati et al. (2020)](https://arxiv.org/abs/2006.02575)
 
 -   In the [tools](ott/tools) folder,
 
@@ -81,7 +81,7 @@ Currently implements the following classes and functions:
 
     -   The `sinkhorn_divergence` function in [sinkhorn_divergence.py](ott/tools/sinkhorn_divergence.py), implements the
         [Sinkhorn divergence](http://proceedings.mlr.press/v84/genevay18a.html),
-        a variant of the Wasserstein distance that uses regularization and is
+        a variant of the Kantorovich-Rubinstein distance that uses regularization and is
         computed by centering the output of `sinkhorn` when comparing two
         measures.
 

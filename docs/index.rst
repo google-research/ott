@@ -11,7 +11,7 @@ Optimal Transport Tools (OTT) documentation
 Intro
 -----
 OTT is a `JAX <https://jax.readthedocs.io/en/latest/index.html>`_ package that bundles a few utilities to compute and differentiate the
-solution to optimal transport problems. OTT can help you compute Wasserstein distances between
+solution to optimal transport problems. OTT can help you compute Kantorovich-Rubinstein distances between
 weighted clouds of points (or histograms), using a cost (e.g. a distance) between individual points.
 
 To that end OTT uses a sturdy and versatile implementation of
@@ -31,7 +31,7 @@ There are currently three packages, ``geometry``, ``core`` and ``tools``, playin
 - ``geometry`` defines classes that describe *two point clouds* paired with a *cost* function (simpler geometries are also implemented, such as that defined by points supported on a multi-dimensional grids with a separable cost [#]_).
   A geometry, along with weight vectors ``a`` and ``b``, describes an OT problem. ``core`` algorithms can solve such problems, using subroutines provided by geometries;
 - ``core`` contains the Sinkhorn algorithm, the main workhorse to solve OT in this package, as well as variants that can be used to compute barycenters of several measures;
-- ``tools`` provides an interface to exploit OT solutions, as produced by ``core`` functions. Such tasks include instantiating OT matrices, computing approximations to Wasserstein distances [#]_ [#]_, or computing differentiable sort and quantile operations [#]_.
+- ``tools`` provides an interface to exploit OT solutions, as produced by ``core`` functions. Such tasks include instantiating OT matrices, computing approximations to Kantorovich-Rubinstein distances [#]_ [#]_, or computing differentiable sort and quantile operations [#]_.
 
 .. toctree::
    :maxdepth: 1

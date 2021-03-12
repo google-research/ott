@@ -30,7 +30,7 @@ def sinkhorn_for_sort(inputs: jnp.ndarray,
                       target_weights: jnp.ndarray,
                       sinkhorn_kw,
                       pointcloud_kw) -> jnp.ndarray:
-  """Runs sinkhorn on a fixed increasing target.
+  """Runs Sinkhorn on a fixed increasing target.
 
   Args:
     inputs: jnp.ndarray[num_points]. Must be one dimensional.
@@ -185,7 +185,7 @@ def softquantile(inputs: jnp.ndarray,
    axis: the axis on which to apply the operator.
    level: the value of the quantile level to be computed. 0.5 for median.
    weight: the weight of the quantile in the transport problem.
-   sinkhorn_kw: keyword argument to the sinkhorn routine.
+   sinkhorn_kw: keyword argument to the Sinkhorn routine.
    **kwargs: extra arguments to the underlying EuclideanGeometry.
 
   Returns:
