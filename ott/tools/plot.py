@@ -78,6 +78,7 @@ def _couplings(ax,
         alpha=0.7,
     )
   ax.legend(fontsize=15)
+  return ax
 
 
 def couplings(arg: Union[transport.Transport, jnp.ndarray],
@@ -93,11 +94,9 @@ def couplings(arg: Union[transport.Transport, jnp.ndarray],
 
   if isinstance(arg, transport.Transport):
     ot = arg
-    _couplings(ax, ot.geom.x, ot.geom.y, ot.a, ot.b, ot.matrix, **kwargs)
-    return ax
+    return _couplings(ax, ot.geom.x, ot.geom.y, ot.a, ot.b, ot.matrix, **kwargs)
 
-  _couplings(ax, arg, y, a, b, matrix, **kwargs)
-  return ax
+  return _couplings(ax, arg, y, a, b, matrix, **kwargs)
 
 
 def _barycenters(ax,
@@ -126,11 +125,9 @@ def barycenters(arg: Union[transport.Transport, jnp.ndarray],
 
   if isinstance(arg, transport.Transport):
     ot = arg
-    _barycenters(ax, ot.geom.y, ot.a, ot.b, ot.matrix, **kwargs)
-    return ax
+    return _barycenters(ax, ot.geom.y, ot.a, ot.b, ot.matrix, **kwargs)
 
-  _barycenters(ax, arg, a, b, matrix, **kwargs)
-  return ax
+  return _barycenters(ax, arg, a, b, matrix, **kwargs)
 
 
 def animate(image_fns: List[str],
@@ -144,12 +141,14 @@ def animate(image_fns: List[str],
         RuntimeWarning,
     )
     return
-  imgs = [Image.open(_) for _ in image_fns]
-  imgs[0].save(gif_fn,
-               save_all=True,
-               append_images=imgs[1:],
-               duration=duration,
-               loop=0)
+  images = [Image.open(image_fn) for image_fn in image_fns]
+  images[0].save(
+      gif_fn,
+      save_all=True,
+      append_images=images[1:],
+      duration=duration,
+      loop=0,
+  )
 
 
 def show_gif(gif_fn):
