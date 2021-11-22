@@ -12,15 +12,28 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 """Plotting utils."""
 
-from typing import Union
+import base64
+from typing import Union, List
+import warnings
 
 import jax.numpy as jnp
 import matplotlib.pyplot as plt
 from ott.tools import transport
 import scipy
+
+try:
+  from PIL import Image
+  PIL_is_importable = True
+except ImportError:
+  PIL_is_importable = False
+
+try:
+  from IPython import display
+  IPython_is_importable = True
+except ImportError:
+  IPython_is_importable = False
 
 
 def bidimensional(x: jnp.ndarray, y: jnp.ndarray):
@@ -56,10 +69,14 @@ def _couplings(ax,
   xy = jnp.concatenate([x[u], y[v]], axis=-1)
   for i in range(xy.shape[0]):
     strength = jnp.max(jnp.array(matrix.shape)) * c[i]
-    ax.plot(xy[i, [0, 2]], xy[i, [1, 3]],
-            linewidth=0.5 + 4 * strength,
-            color=cmap(strength),
-            zorder=0, alpha=0.7)
+    ax.plot(
+        xy[i, [0, 2]],
+        xy[i, [1, 3]],
+        linewidth=0.5 + 4 * strength,
+        color=cmap(strength),
+        zorder=0,
+        alpha=0.7,
+    )
   ax.legend(fontsize=15)
 
 
@@ -76,9 +93,11 @@ def couplings(arg: Union[transport.Transport, jnp.ndarray],
 
   if isinstance(arg, transport.Transport):
     ot = arg
-    return _couplings(ax, ot.geom.x, ot.geom.y, ot.a, ot.b, ot.matrix, **kwargs)
+    _couplings(ax, ot.geom.x, ot.geom.y, ot.a, ot.b, ot.matrix, **kwargs)
+    return ax
 
-  return _couplings(ax, arg, y, a, b, matrix, **kwargs)
+  _couplings(ax, arg, y, a, b, matrix, **kwargs)
+  return ax
 
 
 def _barycenters(ax,
@@ -107,6 +126,41 @@ def barycenters(arg: Union[transport.Transport, jnp.ndarray],
 
   if isinstance(arg, transport.Transport):
     ot = arg
-    return _barycenters(ax, ot.geom.y, ot.a, ot.b, ot.matrix, **kwargs)
+    _barycenters(ax, ot.geom.y, ot.a, ot.b, ot.matrix, **kwargs)
+    return ax
 
-  return _barycenters(ax, arg, a, b, matrix, **kwargs)
+  _barycenters(ax, arg, a, b, matrix, **kwargs)
+  return ax
+
+
+def animate(image_fns: List[str],
+            gif_fn: str,
+            duration: int = 250,
+            loop: int = 0):
+  """Makes an animated GIF from list of images."""
+  if not PIL_is_importable:
+    warnings.warn(
+        'Pillow was not imported successfully. Doing nothing instead.',
+        RuntimeWarning,
+    )
+    return
+  imgs = [Image.open(_) for _ in image_fns]
+  imgs[0].save(gif_fn,
+               save_all=True,
+               append_images=imgs[1:],
+               duration=duration,
+               loop=0)
+
+
+def show_gif(gif_fn):
+  """Show GIF in a notebook, in an embeded way."""
+  if not IPython_is_importable:
+    warnings.run(
+        'IPython was not imported successfully. Doing nothing instead.',
+        RuntimeWarning,
+    )
+    return
+
+  with open(gif_fn, 'rb') as f:
+    base64_encode = base64.b64encode(f.read()).decode('ascii')
+  return display.HTML(f'<img src="data:image/gif;base64,{base64_encode}" />')
