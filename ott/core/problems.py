@@ -335,8 +335,9 @@ class QuadraticProblem:
 
   def tree_flatten(self):
     return (
-        [self.geom_xx, self.geom_yy, self._a, self._b],
-        {'tau_a': self.tau_a, 'tau_b': self.tau_b, 'loss': self.loss})
+        [self.geom_xx, self.geom_yy, self.geom_xy, self._a, self._b],
+        {'tau_a': self.tau_a, 'tau_b': self.tau_b, 'loss': self.loss, 'fused_penalty': self.fused_penalty, 'is_fused':
+          self.is_fused})
 
   @classmethod
   def tree_unflatten(cls, aux_data, children):
